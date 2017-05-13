@@ -31,7 +31,13 @@ public class ContactServiceImpl implements ContactService{
 
 	public List<Contact> getContacts(ContactListCriteria criteria) {
 		try{
-			return contactDao.getContacts(criteria);
+			List<Contact> contact= contactDao.getContacts(criteria);
+			if (contact != null) {
+				return contact;
+			} else {
+				logger.info("No Match found");
+				return null;
+			}
 		} catch(Exception e){
 			logger.error("error in getContacts Method");
 			return null;
@@ -41,7 +47,13 @@ public class ContactServiceImpl implements ContactService{
 	@Override
 	public Contact getContact(String email) {
 		try{
-			return contactDao.getContact(email) ;
+			Contact contact= contactDao.getContact(email) ;
+			if (contact != null) {
+				return contact;
+			} else {
+				logger.info("contact Does not exist");
+				return null;
+			}
 		} catch(Exception e){
 			logger.error("error in getContact Method");
 			return null;
@@ -62,18 +74,18 @@ public class ContactServiceImpl implements ContactService{
 	@Override
 	public Contact updateContact(String email,Contact contact) {
 		try{
-			
+
 			Contact newContact=contactDao.getContact(email);
 			if(newContact.getEmailId().equals(contact.getEmailId())){
-			newContact.setFirstName(contact.getFirstName());
-			newContact.setLastName(contact.getLastName());
-			newContact.setInstituteName(contact.getInstituteName());
-			newContact.setAddress(contact.getAddress());
-			newContact.setCountry(contact.getCountry());
-			newContact.setState(contact.getState());
-			newContact.setStatus(contact.getStatus());
-			contactDao.createContact(newContact);
-			return newContact;
+				newContact.setFirstName(contact.getFirstName());
+				newContact.setLastName(contact.getLastName());
+				newContact.setInstituteName(contact.getInstituteName());
+				newContact.setAddress(contact.getAddress());
+				newContact.setCountry(contact.getCountry());
+				newContact.setState(contact.getState());
+				newContact.setStatus(contact.getStatus());
+				contactDao.createContact(newContact);
+				return newContact;
 			}else{
 				logger.info(" Contact cannot be updated");
 				return null;
@@ -87,7 +99,7 @@ public class ContactServiceImpl implements ContactService{
 	@Override
 	public Contact deleteContact(String email) {
 		try{
-			Contact contact=contactDao.getContact(email);
+			Contact contact = contactDao.getContact(email);
 			contactDao.deleteContact(email);
 			return contact;
 		}catch(Exception e){
@@ -99,8 +111,9 @@ public class ContactServiceImpl implements ContactService{
 	@Override
 	public  List<Contact> sendEmail(EmailDetails email) {
 		try{
-			ContactListCriteria criteria=new ContactListCriteria(email.getInstituteName(),email.getCountry(),email.getState(),email.getStatus());
-			List<Contact> contactlist=contactDao.getContacts(criteria);
+			ContactListCriteria criteria = new ContactListCriteria(email.getInstituteName(),email.getCountry(),
+					email.getState(),email.getStatus());
+			List<Contact> contactlist = contactDao.getContacts(criteria);
 			sendMail(contactlist,email);
 			return contactlist;
 		}catch(Exception e){
@@ -109,19 +122,19 @@ public class ContactServiceImpl implements ContactService{
 		}
 	} 
 
-	private void sendMail(List<Contact> contactList,EmailDetails email) {
+	private void sendMail(List<Contact> contactList, EmailDetails email) {
 		try{
-			Properties properties=new Properties();
+			Properties properties = new Properties();
 			properties.load(ContactServiceImpl.class.getResourceAsStream("/resources/mail.properties"));
 			String username = properties.getProperty("mail.smtp.username");
 			String password = properties.getProperty("mail.smtp.password");
-			Session session=Session.getDefaultInstance( properties,new javax.mail.Authenticator() {    
+			Session session = Session.getDefaultInstance( properties,new javax.mail.Authenticator() {    
 				protected PasswordAuthentication getPasswordAuthentication() {    
 					return new PasswordAuthentication(username,password);  
 				} });  
-			
+
 			for(Contact contact:contactList){
-				MimeMessage message=new MimeMessage(session);
+				MimeMessage message = new MimeMessage(session);
 				message.addRecipient(Message.RecipientType.TO,new InternetAddress(contact.getEmailId()));
 				message.setSubject(email.getSubject());
 				message.setText(email.getSubject());

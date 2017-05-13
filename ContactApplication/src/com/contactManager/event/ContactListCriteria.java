@@ -1,7 +1,6 @@
 package com.contactManager.event;
 
 public class ContactListCriteria {
-
 	private String instituteName;
 
 	private String country;
@@ -16,7 +15,6 @@ public class ContactListCriteria {
 
 	public ContactListCriteria(String instituteName, String country, String state, String status) {
 		super();
-		System.out.println("in Parameterized Constructor");
 		this.instituteName = instituteName;
 		this.country = country;
 		this.state = state;
