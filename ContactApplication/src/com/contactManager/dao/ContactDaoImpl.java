@@ -20,7 +20,7 @@ public class ContactDaoImpl implements ContactDao {
 
 	@SuppressWarnings("unchecked")
 	public List<Contact> getContacts(ContactListCriteria criteria) {
-	
+
 		Criteria crit = sessionFactory.getCurrentSession().createCriteria(Contact.class);
 		if (criteria.getCountry() != null && (!criteria.getCountry().isEmpty()))	{
 			crit.add(Restrictions.like("country",criteria.getCountry() ));
@@ -34,7 +34,7 @@ public class ContactDaoImpl implements ContactDao {
 		if (criteria.getStatus() != null && (!criteria.getStatus().isEmpty())){
 			crit.add(Restrictions.like("status",criteria.getStatus() ));
 		}
-		
+
 		return crit.list();
 	}
 
@@ -50,7 +50,9 @@ public class ContactDaoImpl implements ContactDao {
 	}
 
 	@Override
-	public void deleteContact(String email) {
+	public Contact deleteContact(String email) {
+		Contact contact=getContact(email);
 		sessionFactory.getCurrentSession().delete(getContact(email));
+		return contact;
 	}
 }

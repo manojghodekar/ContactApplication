@@ -5,46 +5,9 @@ public class EmailDetails {
 
 	private String message;
 
-	private String instituteName;
-
-	private String country;
-
-	private String state;
-
-	private String status;
-
-	public String getInstituteName() {
-		return instituteName;
-	}
-
-	public void setInstituteName(String instituteName) {
-		this.instituteName = instituteName;
-	}
-
-	public String getCountry() {
-		return country;
-	}
-
-	public void setCountry(String country) {
-		this.country = country;
-	}
-
-	public String getState() {
-		return state;
-	}
-
-	public void setState(String state) {
-		this.state = state;
-	}
-
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
-	public String getSubject() {
+	private ContactListCriteria criteria;
+	
+   public String getSubject() {
 		return subject;
 	}
 
@@ -58,6 +21,19 @@ public class EmailDetails {
 
 	public String getMessage() {
 		return message;
+	}
+
+	public ContactListCriteria getCriteria() {
+		return criteria;
+	}
+
+	public void setCriteria(ContactListCriteria criteria) {
+		this.criteria = criteria;
+	}
+
+	@Override
+	public String toString() {
+		return "EmailDetails [subject=" + subject + ", message=" + message + ", criteria=" + criteria + "]";
 	}
 
 }

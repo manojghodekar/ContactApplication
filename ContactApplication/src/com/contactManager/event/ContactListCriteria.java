@@ -21,6 +21,7 @@ public class ContactListCriteria {
 		this.status = status;
 	}
 
+
 	public String getInstituteName() {
 		return instituteName;
 	}
@@ -51,5 +52,11 @@ public class ContactListCriteria {
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	@Override
+	public String toString() {
+		return "ContactListCriteria [instituteName=" + instituteName + ", country=" + country + ", state=" + state
+				+ ", status=" + status + "]";
 	}
 }

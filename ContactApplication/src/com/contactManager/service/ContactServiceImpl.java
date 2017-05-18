@@ -1,24 +1,16 @@
 package com.contactManager.service;
 
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Properties;
-
-import javax.mail.Message;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
-
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.contactManager.dao.ContactDao;
 import com.contactManager.event.ContactListCriteria;
 import com.contactManager.event.EmailDetails;
 import com.contactManager.model.Contact;
+import com.contactManager.utility.EmailUtility;
 
 @Service("contactService")
 @Transactional
@@ -30,52 +22,48 @@ public class ContactServiceImpl implements ContactService{
 	private ContactDao contactDao;
 
 	public List<Contact> getContacts(ContactListCriteria criteria) {
+		List<Contact> contactlist = new LinkedList<Contact>();
 		try{
-			List<Contact> contact= contactDao.getContacts(criteria);
-			if (contact != null) {
-				return contact;
-			} else {
-				logger.info("No Match found");
-				return null;
-			}
+			contactlist = contactDao.getContacts(criteria);
+			if (contactlist.isEmpty()) {
+				logger.info("No Match Found");	
+			} 
 		} catch(Exception e){
-			logger.error("error in getContacts Method");
-			return null;
+			logger.error("error in getContacts Method" + e);
 		}
+		return contactlist;
 	}
 
 	@Override
 	public Contact getContact(String email) {
+		Contact contact = null;
 		try{
-			Contact contact= contactDao.getContact(email) ;
-			if (contact != null) {
-				return contact;
-			} else {
+			contact	= contactDao.getContact(email) ;
+			if (contact == null) {
 				logger.info("contact Does not exist");
-				return null;
 			}
 		} catch(Exception e){
-			logger.error("error in getContact Method");
-			return null;
+			logger.error("error in getContact Method" + e);
 		}
+		return contact;
 	}	
 
 	@Override
 	public Contact createContact(Contact contact) {
+		Contact newContact = null;
 		try{
-			contactDao.createContact(contact);
-			return contact;
+			newContact=contactDao.createContact(contact);
 		} catch(Exception e){
-			logger.error("error in crateContact Method");
-			return null;
+			logger.error("Error in creating Contact" + e) ;
 		}
+		return newContact;
 	}
 
 	@Override
 	public Contact updateContact(String email,Contact contact) {
+		Contact newContact=null;
 		try{
-
-			Contact newContact=contactDao.getContact(email);
+			newContact=contactDao.getContact(email);
 			if(newContact.getEmailId().equals(contact.getEmailId())){
 				newContact.setFirstName(contact.getFirstName());
 				newContact.setLastName(contact.getLastName());
@@ -85,64 +73,39 @@ public class ContactServiceImpl implements ContactService{
 				newContact.setState(contact.getState());
 				newContact.setStatus(contact.getStatus());
 				contactDao.createContact(newContact);
-				return newContact;
-			}else{
-				logger.info(" Contact cannot be updated");
-				return null;
+			} else {
+				logger.info(" Contact cannot be updated due to different email id");
 			}
 		} catch(Exception e){
-			logger.error("error in updateContact");
-			return null;
+			logger.error("Error in updateContact :" + e) ;
 		}
+		return newContact;
 	}
 
 	@Override
 	public Contact deleteContact(String email) {
+		Contact contact = null;
 		try{
-			Contact contact = contactDao.getContact(email);
-			contactDao.deleteContact(email);
-			return contact;
-		}catch(Exception e){
-			logger.error("Contact Doesnt Exist");
-			return null;
+			contact = contactDao.deleteContact(email);
+		} catch (IllegalArgumentException e){
+			logger.error("Illegal Argument to deleteContact Method " + e);
 		}
+		catch( Exception e){
+			logger.error("Error in Delete Contact :" + e);
+		}
+		return contact;
 	}
 
 	@Override
 	public  List<Contact> sendEmail(EmailDetails email) {
+		List<Contact> contactlist = new LinkedList<Contact>();
 		try{
-			ContactListCriteria criteria = new ContactListCriteria(email.getInstituteName(),email.getCountry(),
-					email.getState(),email.getStatus());
-			List<Contact> contactlist = contactDao.getContacts(criteria);
-			sendMail(contactlist,email);
-			return contactlist;
-		}catch(Exception e){
-			logger.error("error in send mail method");
-			return null;
+			ContactListCriteria criteria = email.getCriteria();
+			contactlist = contactDao.getContacts(criteria);
+			EmailUtility.sendMail(contactlist,email);
+		} catch( Exception e ){
+			logger.error("error in send Email method" + e);
 		}
+		return contactlist;
 	} 
-
-	private void sendMail(List<Contact> contactList, EmailDetails email) {
-		try{
-			Properties properties = new Properties();
-			properties.load(ContactServiceImpl.class.getResourceAsStream("/resources/mail.properties"));
-			String username = properties.getProperty("mail.smtp.username");
-			String password = properties.getProperty("mail.smtp.password");
-			Session session = Session.getDefaultInstance( properties,new javax.mail.Authenticator() {    
-				protected PasswordAuthentication getPasswordAuthentication() {    
-					return new PasswordAuthentication(username,password);  
-				} });  
-
-			for(Contact contact:contactList){
-				MimeMessage message = new MimeMessage(session);
-				message.addRecipient(Message.RecipientType.TO,new InternetAddress(contact.getEmailId()));
-				message.setSubject(email.getSubject());
-				message.setText(email.getSubject());
-				Transport.send(message);
-				logger.info("Message send Successfully");
-			}
-		}catch(Exception e){
-			logger.error("Error in sendMail method");
-		}
-	}
 }

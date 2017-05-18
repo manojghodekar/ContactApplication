@@ -12,5 +12,5 @@ public interface ContactDao {
 
 	Contact createContact(Contact contact);
 
-	void deleteContact(String email);
+	Contact deleteContact(String email);
 }

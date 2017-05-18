@@ -28,7 +28,7 @@ public class ContactController
 	public  List<Contact> getContacts(@RequestParam("instituteName") String instituteName,
 			@RequestParam("country") String country,
 			@RequestParam("state") String state,
-			@RequestParam("status") String status) {
+			@RequestParam("status") String status ) {
 		ContactListCriteria criteria = new ContactListCriteria(instituteName,country,state,status);
 		return contactService.getContacts(criteria);
 	}
