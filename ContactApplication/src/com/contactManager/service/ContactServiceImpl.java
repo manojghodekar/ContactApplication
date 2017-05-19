@@ -29,11 +29,11 @@ public class ContactServiceImpl implements ContactService{
 		try{
 			contactlist = contactDao.getContacts(criteria);
 			if (contactlist.isEmpty()) {
-				throw new ContactException("No Matching contact found wthe give criteria");
+				throw new ContactException("No Matching contact found with given criteria");
 			} 
 			return new ResponseEntity< List<Contact>>(contactlist,HttpStatus.OK);
 		} catch(Exception e){ 
-			logger.error("error in getContacts Method" + e);
+			logger.error("error in getContacts Method :" + e);
 			return new ResponseEntity<List<Contact>>(HttpStatus.NOT_FOUND);
 		}
 	}
@@ -44,7 +44,7 @@ public class ContactServiceImpl implements ContactService{
 		try{
 			contact	= contactDao.getContact(email) ;
 			if (contact == null) {
-				throw new ContactException ("contact with given email id Does not exist");
+				throw new ContactException ("Contact with given email id Does not exist");
 			}
 			return new ResponseEntity<Contact>(contact,HttpStatus.OK);
 		} catch(Exception e){
@@ -110,7 +110,7 @@ public class ContactServiceImpl implements ContactService{
 			List<Contact> contactlist  = contactDao.getContacts(criteria);
 			
 			if(contactlist.isEmpty()){
-				throw new ContactException ("No Matching contact found wthe give criteria");
+				throw new ContactException ("No Matching contact found wthe given criteria");
 			}
 			
 			EmailUtility.sendMail(contactlist,email);
