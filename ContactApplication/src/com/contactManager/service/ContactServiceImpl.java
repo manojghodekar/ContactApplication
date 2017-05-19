@@ -4,6 +4,8 @@ import java.util.LinkedList;
 import java.util.List;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.contactManager.dao.ContactDao;
@@ -22,49 +24,50 @@ public class ContactServiceImpl implements ContactService{
 	@Autowired
 	private ContactDao contactDao;
 
-	public List<Contact> getContacts(ContactListCriteria criteria) {
+	public ResponseEntity< List<Contact>> getContacts(ContactListCriteria criteria) {
 		List<Contact> contactlist = new LinkedList<Contact>();
 		try{
 			contactlist = contactDao.getContacts(criteria);
 			if (contactlist.isEmpty()) {
 				throw new ContactException("No Matching contact found wthe give criteria");
 			} 
+			return new ResponseEntity< List<Contact>>(contactlist,HttpStatus.OK);
 		} catch(Exception e){ 
 			logger.error("error in getContacts Method" + e);
+			return new ResponseEntity<List<Contact>>(HttpStatus.NOT_FOUND);
 		}
-		return contactlist;
 	}
 
 	@Override
-	public Contact getContact(String email) {
+	public  ResponseEntity< Contact>   getContact(String email) {
 		Contact contact = new Contact();
 		try{
 			contact	= contactDao.getContact(email) ;
 			if (contact == null) {
 				throw new ContactException ("contact with given email id Does not exist");
 			}
+			return new ResponseEntity<Contact>(contact,HttpStatus.OK);
 		} catch(Exception e){
-			logger.error("error in getContact Method :" +e );
+			logger.error("Error in getContact :"+e);
+			return new ResponseEntity<Contact>(HttpStatus.NOT_FOUND);
 		}
-		return contact;
 	}	
 
 	@Override
-	public Contact createContact(Contact contact) {
-		Contact newContact =  new Contact();
+	public ResponseEntity<Contact> createContact(Contact contact) {
 		try{
-			newContact=contactDao.createContact(contact);
+			Contact	newContact=contactDao.createContact(contact);
+			return new ResponseEntity<Contact>(	newContact,HttpStatus.OK);
 		} catch(Exception e){
 			logger.error("Error in creating Contact :" + e) ;
+			return new ResponseEntity<Contact>(HttpStatus.NOT_FOUND);
 		}
-		return newContact;
 	}
 
 	@Override
-	public Contact updateContact(String email,Contact contact) {
-		Contact newContact= new Contact();
+	public ResponseEntity<Contact> updateContact(String email,Contact contact) {
 		try{
-			newContact=contactDao.getContact(email);
+			Contact newContact=contactDao.getContact(email);
 			if(newContact.getEmailId().equals(contact.getEmailId())){
 				newContact.setFirstName(contact.getFirstName());
 				newContact.setLastName(contact.getLastName());
@@ -74,42 +77,43 @@ public class ContactServiceImpl implements ContactService{
 				newContact.setState(contact.getState());
 				newContact.setStatus(contact.getStatus());
 				contactDao.createContact(newContact);
+				return new ResponseEntity<Contact>(	newContact,HttpStatus.OK);
 			} else {
 				throw new ContactException ("Given Contact can not be update due to different email id");
 			}
 		} catch(Exception e){
 			logger.error("Error in updateContact :" +e) ;
+			return new ResponseEntity<Contact>(HttpStatus.NOT_FOUND);
 		}
-		return newContact;
 	}
 
 	@Override
-	public Contact deleteContact(String email) {
-		Contact contact =  new Contact();
+	public ResponseEntity<Contact> deleteContact(String email) {
 		try{
-			contact = contactDao.deleteContact(email);
+			Contact contact = contactDao.deleteContact(email);
+			return new ResponseEntity<Contact>(	contact,HttpStatus.OK);
 		} catch (IllegalArgumentException e){
 			logger.error("Illegal Argument to deleteContact Method " + e);
-		}
-		catch( Exception e){
+			return new ResponseEntity<Contact>(HttpStatus.NOT_FOUND);
+		} catch( Exception e){
 			logger.error("Error in Delete Contact :" + e);
+			return new ResponseEntity<Contact>(HttpStatus.NOT_FOUND);
 		}
-		return contact;
 	}
 
 	@Override
-	public  List<Contact> sendEmail(EmailDetails email) {
-		List<Contact> contactlist = new LinkedList<Contact>();
+	public  ResponseEntity< List<Contact>> sendEmail(EmailDetails email) {
 		try{
 			ContactListCriteria criteria = email.getCriteria();
-			contactlist = contactDao.getContacts(criteria);
+			List<Contact> contactlist  = contactDao.getContacts(criteria);
 			if(contactlist.isEmpty()){
 				throw new ContactException ("No Matching contact found wthe give criteria");
 			}
 			EmailUtility.sendMail(contactlist,email);
+			return new ResponseEntity< List<Contact>>(contactlist,HttpStatus.OK);
 		} catch( Exception e ){
 			logger.error("error in send Email method :" + e);
+			return new ResponseEntity<List<Contact>>(HttpStatus.NOT_FOUND);
 		}
-		return contactlist;
 	} 
 }
