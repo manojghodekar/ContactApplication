@@ -1,4 +1,4 @@
-package com.contactManager.utility;
+package com.contactManager.error;
 
 public class ContactException  extends Exception  {
 

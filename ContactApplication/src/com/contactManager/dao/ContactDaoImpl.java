@@ -50,9 +50,7 @@ public class ContactDaoImpl implements ContactDao {
 	}
 
 	@Override
-	public Contact deleteContact(String email) {
-		Contact contact=getContact(email);
-		sessionFactory.getCurrentSession().delete(getContact(email));
-		return contact;
+	public void deleteContact(Contact contact) {
+		sessionFactory.getCurrentSession().delete(contact);
 	}
 }

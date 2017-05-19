@@ -12,7 +12,7 @@ import com.contactManager.dao.ContactDao;
 import com.contactManager.event.ContactListCriteria;
 import com.contactManager.event.EmailDetails;
 import com.contactManager.model.Contact;
-import com.contactManager.utility.ContactException;
+import com.contactManager.error.ContactException;
 import com.contactManager.utility.EmailUtility;
 
 @Service("contactService")
@@ -79,7 +79,7 @@ public class ContactServiceImpl implements ContactService{
 				contactDao.createContact(newContact);
 				return new ResponseEntity<Contact>(	newContact,HttpStatus.OK);
 			} else {
-				throw new ContactException ("Given Contact can not be update due to different email id");
+			throw new ContactException ("Given Contact can not be update due to different email id");
 			}
 		} catch(Exception e){
 			logger.error("Error in updateContact :" +e) ;
@@ -90,11 +90,13 @@ public class ContactServiceImpl implements ContactService{
 	@Override
 	public ResponseEntity<Contact> deleteContact(String email) {
 		try{
-			Contact contact = contactDao.deleteContact(email);
+			Contact contact = contactDao.getContact(email);
+			if(contact!=null){
+		    contactDao.deleteContact(contact);
 			return new ResponseEntity<Contact>(	contact,HttpStatus.OK);
-		} catch (IllegalArgumentException e){
-			logger.error("Illegal Argument to deleteContact Method " + e);
-			return new ResponseEntity<Contact>(HttpStatus.NOT_FOUND);
+			}else {
+				throw new ContactException ("Contact with given email id does not exist");
+		    }
 		} catch( Exception e){
 			logger.error("Error in Delete Contact :" + e);
 			return new ResponseEntity<Contact>(HttpStatus.NOT_FOUND);
@@ -106,9 +108,11 @@ public class ContactServiceImpl implements ContactService{
 		try{
 			ContactListCriteria criteria = email.getCriteria();
 			List<Contact> contactlist  = contactDao.getContacts(criteria);
+			
 			if(contactlist.isEmpty()){
 				throw new ContactException ("No Matching contact found wthe give criteria");
 			}
+			
 			EmailUtility.sendMail(contactlist,email);
 			return new ResponseEntity< List<Contact>>(contactlist,HttpStatus.OK);
 		} catch( Exception e ){
