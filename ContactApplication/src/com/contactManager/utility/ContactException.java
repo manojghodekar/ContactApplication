@@ -1,6 +1,6 @@
 package com.contactManager.utility;
 
-public class ContactException extends Exception  {
+public class ContactException  extends Exception  {
 
 	private static final long serialVersionUID = 1L;
 	public String message;

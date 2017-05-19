@@ -27,7 +27,7 @@ public class ContactServiceImpl implements ContactService{
 		try{
 			contactlist = contactDao.getContacts(criteria);
 			if (contactlist.isEmpty()) {
-				throw new ContactException("No Match Found");
+				throw new ContactException("No Matching contact found wthe give criteria");
 			} 
 		} catch(Exception e){ 
 			logger.error("error in getContacts Method" + e);
@@ -37,7 +37,7 @@ public class ContactServiceImpl implements ContactService{
 
 	@Override
 	public Contact getContact(String email) {
-		Contact contact = null;
+		Contact contact = new Contact();
 		try{
 			contact	= contactDao.getContact(email) ;
 			if (contact == null) {
@@ -51,7 +51,7 @@ public class ContactServiceImpl implements ContactService{
 
 	@Override
 	public Contact createContact(Contact contact) {
-		Contact newContact = null;
+		Contact newContact =  new Contact();
 		try{
 			newContact=contactDao.createContact(contact);
 		} catch(Exception e){
@@ -62,7 +62,7 @@ public class ContactServiceImpl implements ContactService{
 
 	@Override
 	public Contact updateContact(String email,Contact contact) {
-		Contact newContact=null;
+		Contact newContact= new Contact();
 		try{
 			newContact=contactDao.getContact(email);
 			if(newContact.getEmailId().equals(contact.getEmailId())){
@@ -85,7 +85,7 @@ public class ContactServiceImpl implements ContactService{
 
 	@Override
 	public Contact deleteContact(String email) {
-		Contact contact = null;
+		Contact contact =  new Contact();
 		try{
 			contact = contactDao.deleteContact(email);
 		} catch (IllegalArgumentException e){
@@ -104,9 +104,9 @@ public class ContactServiceImpl implements ContactService{
 			ContactListCriteria criteria = email.getCriteria();
 			contactlist = contactDao.getContacts(criteria);
 			if(contactlist.isEmpty()){
-				throw new ContactException ("No contact found wthe give criteria");
+				throw new ContactException ("No Matching contact found wthe give criteria");
 			}
-		  EmailUtility.sendMail(contactlist,email);
+			EmailUtility.sendMail(contactlist,email);
 		} catch( Exception e ){
 			logger.error("error in send Email method :" + e);
 		}
