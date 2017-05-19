@@ -10,6 +10,7 @@ import com.contactManager.dao.ContactDao;
 import com.contactManager.event.ContactListCriteria;
 import com.contactManager.event.EmailDetails;
 import com.contactManager.model.Contact;
+import com.contactManager.utility.ContactException;
 import com.contactManager.utility.EmailUtility;
 
 @Service("contactService")
@@ -26,9 +27,9 @@ public class ContactServiceImpl implements ContactService{
 		try{
 			contactlist = contactDao.getContacts(criteria);
 			if (contactlist.isEmpty()) {
-				logger.info("No Match Found");	
+				throw new ContactException("No Match Found");
 			} 
-		} catch(Exception e){
+		} catch(Exception e){ 
 			logger.error("error in getContacts Method" + e);
 		}
 		return contactlist;
@@ -40,10 +41,10 @@ public class ContactServiceImpl implements ContactService{
 		try{
 			contact	= contactDao.getContact(email) ;
 			if (contact == null) {
-				logger.info("contact Does not exist");
+				throw new ContactException ("contact with given email id Does not exist");
 			}
 		} catch(Exception e){
-			logger.error("error in getContact Method" + e);
+			logger.error("error in getContact Method :" +e );
 		}
 		return contact;
 	}	
@@ -54,7 +55,7 @@ public class ContactServiceImpl implements ContactService{
 		try{
 			newContact=contactDao.createContact(contact);
 		} catch(Exception e){
-			logger.error("Error in creating Contact" + e) ;
+			logger.error("Error in creating Contact :" + e) ;
 		}
 		return newContact;
 	}
@@ -74,10 +75,10 @@ public class ContactServiceImpl implements ContactService{
 				newContact.setStatus(contact.getStatus());
 				contactDao.createContact(newContact);
 			} else {
-				logger.info(" Contact cannot be updated due to different email id");
+				throw new ContactException ("Given Contact can not be update due to different email id");
 			}
 		} catch(Exception e){
-			logger.error("Error in updateContact :" + e) ;
+			logger.error("Error in updateContact :" +e) ;
 		}
 		return newContact;
 	}
@@ -102,9 +103,12 @@ public class ContactServiceImpl implements ContactService{
 		try{
 			ContactListCriteria criteria = email.getCriteria();
 			contactlist = contactDao.getContacts(criteria);
-			EmailUtility.sendMail(contactlist,email);
+			if(contactlist.isEmpty()){
+				throw new ContactException ("No contact found wthe give criteria");
+			}
+		  EmailUtility.sendMail(contactlist,email);
 		} catch( Exception e ){
-			logger.error("error in send Email method" + e);
+			logger.error("error in send Email method :" + e);
 		}
 		return contactlist;
 	} 

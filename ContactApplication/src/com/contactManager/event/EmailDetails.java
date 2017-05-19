@@ -35,5 +35,4 @@ public class EmailDetails {
 	public String toString() {
 		return "EmailDetails [subject=" + subject + ", message=" + message + ", criteria=" + criteria + "]";
 	}
-
 }
