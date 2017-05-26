@@ -31,11 +31,12 @@ public class ContactServiceImpl implements ContactService{
 			if (contactlist.isEmpty()) {
 				throw new ContactException("No Matching contact found with given criteria");
 			} 
-			return new ResponseEntity< List<Contact>>(contactlist,HttpStatus.OK);
+			return new ResponseEntity< List<Contact>>(contactlist,HttpStatus.ACCEPTED);
 		} catch(Exception e){ 
 			logger.error("error in getContacts Method :" + e);
 			return new ResponseEntity<List<Contact>>(HttpStatus.NOT_FOUND);
 		}
+
 	}
 
 	@Override
@@ -79,7 +80,7 @@ public class ContactServiceImpl implements ContactService{
 				contactDao.createContact(newContact);
 				return new ResponseEntity<Contact>(	newContact,HttpStatus.OK);
 			} else {
-			throw new ContactException ("Given Contact can not be update due to different email id");
+				throw new ContactException ("Given Contact can not be update due to different email id");
 			}
 		} catch(Exception e){
 			logger.error("Error in updateContact :" +e) ;
@@ -92,11 +93,11 @@ public class ContactServiceImpl implements ContactService{
 		try{
 			Contact contact = contactDao.getContact(email);
 			if(contact!=null){
-		    contactDao.deleteContact(contact);
-			return new ResponseEntity<Contact>(	contact,HttpStatus.OK);
+				contactDao.deleteContact(contact);
+				return new ResponseEntity<Contact>(	contact,HttpStatus.OK);
 			}else {
 				throw new ContactException ("Contact with given email id does not exist");
-		    }
+			}
 		} catch( Exception e){
 			logger.error("Error in Delete Contact :" + e);
 			return new ResponseEntity<Contact>(HttpStatus.NOT_FOUND);
@@ -108,11 +109,11 @@ public class ContactServiceImpl implements ContactService{
 		try{
 			ContactListCriteria criteria = email.getCriteria();
 			List<Contact> contactlist  = contactDao.getContacts(criteria);
-			
+
 			if(contactlist.isEmpty()){
 				throw new ContactException ("No Matching contact found wthe given criteria");
 			}
-			
+
 			EmailUtility.sendMail(contactlist,email);
 			return new ResponseEntity< List<Contact>>(contactlist,HttpStatus.OK);
 		} catch( Exception e ){

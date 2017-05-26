@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-route.js"></script>
+
+    <script src="js/app.js"></script>
+    <script src="js/contact-list.js"></script>
+    <script src="js/contact.js"></script>
+    <script src="js/contact-detail.js"></script>
+    <script src="js/create-contact.js"></script>
+  </head>
+  <body ng-app="contact">
+    <a href="#/contactlist">Get All Contact</a>
+    <br>
+    <a href="#/AddContact">Add Contact</a>
+    <br>
+    <br>
+    <div ng-view></div>
+  </body>
+</html>

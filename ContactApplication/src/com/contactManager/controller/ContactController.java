@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +19,7 @@ import com.contactManager.model.Contact;
 import com.contactManager.service.ContactService;
 
 @RestController
-@RequestMapping("/contact")
+@RequestMapping("contacts")
 public class ContactController 
 {
 	@Autowired
@@ -26,17 +27,18 @@ public class ContactController
 
 	@RequestMapping(method = RequestMethod.GET, produces ="application/json")
 	@ResponseBody
-	public ResponseEntity< List <Contact> > getContacts(@RequestParam("instituteName") String instituteName,
-			@RequestParam("country") String country,
-			@RequestParam("state") String state,
-			@RequestParam("status") String status ) {
+	public ResponseEntity< List <Contact> > getContacts(@RequestParam(value="instituteName",required=false) String instituteName,
+			@RequestParam(value="country", required=false) String country,
+			@RequestParam(value="state", required=false) String state,
+			@RequestParam(value="status",required=false) String status ) {
 		ContactListCriteria criteria = new ContactListCriteria(instituteName,country,state,status);
 		return contactService.getContacts(criteria);
 	}
 
+	@SuppressWarnings("unchecked")
 	@RequestMapping(method = RequestMethod.GET, value = "/{email}", produces = "application/json" )
 	@ResponseBody
-	public  ResponseEntity <Contact> getContact(@PathVariable String email){
+	public  ResponseEntity<Contact> getContact(@PathVariable String email){
 		return contactService.getContact(email);
 	}
 

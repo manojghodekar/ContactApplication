@@ -1,0 +1,20 @@
+.body {
+    background-color: lightblue;
+     border-collapse: collapse;
+    
+}
+.tablecontainer{
+	padding-left: 20px;
+}
+.form {
+  background:rgba($form-bg,.9);
+  padding: 40px;
+  max-width:600px;
+  margin:40px auto;
+  border-radius:$br;
+  box-shadow:0 4px 10px 4px rgba($form-bg,.3);
+}
+.formcontainer{
+	background-color: #DAE8E8;
+	padding: 20px;
+}
