@@ -1,17 +1,23 @@
 package com.contactManager.model;
 
+import javax.annotation.Generated;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
 @Table(name="contact")
 public class Contact {
+	@Id
+	@GeneratedValue(strategy=GenerationType.TABLE)
+	private long id;
+	
 	private String firstName;
 
 	private String lastName;
 
-	@Id
 	private String emailId;
 
 	private String instituteName;
@@ -87,11 +93,21 @@ public class Contact {
 	public void setStatus(String status) {
 		this.status = status;
 	}
+     
+	public long getId() {
+		return id;
+	}
 
+	public void setId(long id) {
+		this.id = id;
+	}	
+	
 	@Override
 	public String toString() {
 		return "Contact [firstName=" + firstName + ", lastName=" + lastName + ", emailId=" + emailId
 				+ ", instituteName=" + instituteName + ", country=" + country + ", state=" + state + ", address="
 				+ address + ", status=" + status + "]";
-	}	
+	}
+
+	
 }

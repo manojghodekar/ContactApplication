@@ -1,22 +1,25 @@
 <link rel = "stylesheet" type = "text/css" href = "css/app.css" />
-<table  border="1" cellpadding="5" class="body">  
-  <tr >
-    <th>First Name</th>
-    <th>Last Name</th>
-    <th>Email Id</th>
-    <th>InstituteName</th>
-    <th>Country</th>
-    <th>status</th>
-    
-  </tr>     
-  <tr ng-repeat="contact in contacts">   
-    <td align="center">{{ contact.firstName}}</td>
+<h1 align="center" background-color="#C63D0F">List Of Contacts</h1>
+<table class="generic-container">
+  <thead>
+    <tr class="empty">
+      <th>First Name</th>
+      <th>Last Name</th>
+      <th>Email Id</th>
+      <th>InstituteName</th>
+      <th>Country</th>
+      <th>status</th>
+   </tr>     
+  <thead>
+  <tr ng-repeat="contact in contacts" class="border">   
+    <td>{{ contact.firstName}}</td>
     <td>{{ contact.lastName }}</td>
-    <td><a style="display: block;"ng-href="#/contact-details/{{contact.emailId}}">{{ contact.emailId }}</a></td>
+    <td><a ng-href="#/contact-details/{{contact.id}}">{{contact.emailId }}</a></td>
     <td>{{ contact.instituteName }}</td>
     <td>{{ contact.country }}</td>
     <td>{{ contact.status  }}</td>
-    <td><button ng-click="Edit(contact.emailId)">Edit</button></td>
-    <td><button ng-click="remove(contact.emailId, $index)">remove</button></td>
+    <td><button  class="button" ng-click="Edit(contact.id)">Edit</button></td>
+    <td><button class="cancelbtn" ng-click="remove(contact.id, $index)">remove</button></td>
   </tr>        
-</table>
+</table>   
+</div>    

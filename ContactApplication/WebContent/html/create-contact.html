@@ -1,59 +1,60 @@
 <link rel = "stylesheet" type = "text/css" href = "css/app.css" />
-<div class="formcontainer"> 
-  <h2>Registration Form</h2>
-    <form name="addContactForm">
-      <div class="form-group" >
-        <label for="FirstName">First name</label><br>
-        <input type="text" name="firstName" class="" ng-model="contact.firstName" required />
-        <span ng-show="form.firstName.$dirty && form.firstName.$error.required" class="help-block">First name is required</span>
-      </div>
-      <br>
-      <div class="form-group" >
-        <label for="LastName">Last name</label><br>
-         <input type="text" name="lastName"  class="form-control" ng-model="contact.lastName" required />
-          <span ng-show="form.lastName.$dirty && form.lastName.$error.required" class="help-block">Last name is required</span>
-      </div>
-       <br>
-       <div class="form-group" ng-if="!email">
-          <label for="EmailId">Email ID</label><br>
-          <input type="text" name="emailId"  class="form-control" ng-model="contact.emailId" required />
-          <span ng-show="form.username.$dirty && form.username.$error.required" class="help-block">Email ID is required</span>
-        </div>
-        <br>
-        <div class="form-group">
-            <label for="InstituteName">Institute Name</label> <br>
-            <input type="text" name="instituteName"  class="form-control" ng-model="contact.instituteName" required />
-            <span ng-show="form.password.$dirty && form.password.$error.required" class="help-block">Password is required</span>
-        </div>
-        <br>
-          <div class="form-group">
-            <label for="Country">Country</label><br>
-            <input type="text" name="country" class="form-control" ng-model="contact.country" required />
-            <span ng-show="form.password.$dirty && form.password.$error.required" class="help-block">Password is required</span>
-        </div>
-        <br>
-          <div class="form-group">
-            <label for="State">State</label> <br>
-            <input type="text" name="state" class="form-control" ng-model="contact.state" required />
-            <span ng-show="form.password.$dirty && form.password.$error.required" class="help-block">Password is required</span>
-        </div>
-        <br>
-          <div class="form-group">
-            <label for="Address">Address</label> <br>
-            <input type="text" name="address" class="form-control" ng-model="contact.address" required />
-            <span ng-show="form.password.$dirty && form.password.$error.required" class="help-block">Password is required</span>
-        </div>
-         <br>
-          <div class="form-group">
-            <label for="Status">Status</label> <br>
-            <input type="text" name="status"  class="form-control" ng-model="contact.status" required />
-            <span ng-show="form.password.$dirty && form.password.$error.required" class="help-block">Password is required</span>
-        </div>
-         <br>
-        <div class="form-actions">
-          <button ng-if="!!email" class="btn btn-primary" ng-click="updateContact()"\>Update</button>
-          <button ng-if="!email" class="btn btn-primary" ng-click="addContact()"\>Register</button>
-        </div>
-    </form>
+<link rel = "stylesheet" type = "text/css" href = "css/bootstrap.css"/>
+<div class="form">     
+  <form name="addContactForm">
+    <div class="form-group" >
+      <label for="FirstName">First name</label><br>
+      <input type="text" name="firstName" class="form-control" ng-model="contact.firstName" required />
+      <span class="error" ng-show="form.firstName.$dirty && form.firstName.$error.required" class="help-block">First name is required</span>
+    </div>
+    <br>
+    <div class="form-group">
+      <label for="LastName">Last name</label><br>
+      <input type="text" name="lastName"  class="form-control" ng-model="contact.lastName" required autocomplete="off" />
+      <span class="error" ng-show="form.lastName.$dirty && form.lastName.$error.required" class="help-block">Last name is required</span>
+    </div>
+    <br>
+    <div class="form-group" >
+      <label for="EmailId">Email ID</label><br>
+      <input type="email" name="emailId"  class="form-control" ng-model="contact.emailId" required />
+      <span ng-show="form.emailId.$dirty && form.emailId.$error.required" class="help-block">Email ID is required</span>
+      <span class="error" ng-show="myForm.input.$error.email"> Not valid email!</span>
+    </div>
+    <br>
+    <div class="form-group">
+      <label for="InstituteName">Institute Name</label> <br>
+      <input type="text" name="instituteName"  class="form-control" ng-model="contact.instituteName" required />
+      <span class="error"ng-show="form.instituteName.$dirty && form.instituteName.$error.required" class="help-block">InstituteName is required</span>
+    </div>
+    <br>
+    <div class="form-group">
+      <label for="Country">Country</label><br>
+      <input type="text" name="country" class="form-control" ng-model="contact.country" required />
+      <span class="error" ng-show="form.country.$dirty && form.country.$error.required" class="help-block">Country Name is required</span>
+    </div>
+    <br>
+    <div class="form-group">
+      <label for="State">State</label> <br>
+      <input type="text" name="state" class="form-control" ng-model="contact.state" required />
+      <span class="error" ng-show="form.state.$dirty && form.state.$error.required" class="help-block">State Name is required</span>
+    </div>
+    <br>
+    <div class="form-group">
+      <label for="Address">Address</label> <br>
+      <input type="text" name="address" class="form-control" ng-model="contact.address" required />
+      <span  class="error "ng-show="form.address.$dirty && form.address.$error.required" class="help-block">Address is required</span>
+    </div>
+    <br>
+    <div class="form-group">
+      <label for="Status">Status</label> <br>
+      <input type="text" name="status"class="form-control" ng-model="contact.status" required />
+      <span class="error" ng-show="form.status.$dirty && form.status.$error.required" class="help-block"> Status is required</span>
+    </div>
+    <br>
+    <div class="form-actions">
+      <button class="button" ng-if="!!id" class="btn btn-default" ng-click="updateContact()"\>Update</button>
+      <button class="button" ng-if="!id" class="btn btn-default" ng-click="addContact()"\>Register</button>
+    </div>
+  </form>
 </div>
  

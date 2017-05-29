@@ -5,8 +5,8 @@ app.controller('ContactCtrl', function($scope, $routeParams, Contacts) {
   }
   
   function loadContacts() {
-   var email=$routeParams.email;
-    Contacts.getContactByEmail(email).then(
+   var id=$routeParams.id;
+    Contacts.getContact(id).then(
       function(contact) {
         $scope.contact = contact;
       }

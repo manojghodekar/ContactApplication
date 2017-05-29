@@ -7,16 +7,15 @@ app.factory('Contacts', function($http) {
     });
   }
   
-   function getContactByEmail(email) {
-    return $http.get(URL + '/' + email).then(
+   function getContact(id) {
+    return $http.get(URL + '/' + id).then(
       function(resp) {
         return resp.data;
       }
     );
   }
   
-  
-   function addContact(contact) {
+  function addContact(contact) {
     return $http.post(URL,contact).then(
       function(resp) {
         return resp.data;
@@ -24,15 +23,16 @@ app.factory('Contacts', function($http) {
     );
   }
   
-  function deleteContactByEmail(email) {
-    return $http.delete(URL + '/' + email).then(
+  function deleteContact(id) {
+    return $http.delete(URL + '/' + id).then(
       function(resp) {
         return resp.data;
       }
     );
   }
-   function updateContact(contact) {
-      return $http.put(URL + '/' + contact.emailId, contact).then(
+  
+  function updateContact(contact) {
+      return $http.put(URL + '/' + contact.id, contact).then(
         function(resp) {
           return resp.data;
       }
@@ -41,9 +41,9 @@ app.factory('Contacts', function($http) {
    
   return {
     getContacts: getContacts,
-    getContactByEmail : getContactByEmail,
+    getContact : getContact,
     addContact: addContact,
-    deleteContactByEmail: deleteContactByEmail,
+    deleteContact: deleteContact,
     updateContact : updateContact
   };
 });

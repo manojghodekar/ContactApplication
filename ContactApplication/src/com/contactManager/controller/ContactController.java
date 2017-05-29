@@ -36,28 +36,28 @@ public class ContactController
 	}
 
 	@SuppressWarnings("unchecked")
-	@RequestMapping(method = RequestMethod.GET, value = "/{email}", produces = "application/json" )
+	@RequestMapping(method = RequestMethod.GET, value = "/{id}", produces = "application/json" )
 	@ResponseBody
-	public  ResponseEntity<Contact> getContact(@PathVariable String email){
-		return contactService.getContact(email);
+	public  ResponseEntity<Contact> getContact(@PathVariable long id){
+		return contactService.getContact(id);
 	}
 
-	@RequestMapping(method = RequestMethod.POST, produces = "application/json" )
+	@RequestMapping(method = RequestMethod.POST,produces = "application/json" )
 	@ResponseBody
 	public ResponseEntity <Contact> createContact(@RequestBody Contact contact) {
 		return contactService.createContact(contact);
 	}
 
-	@RequestMapping(method = RequestMethod.PUT, value = "/{email}", produces = "application/json")
+	@RequestMapping(method = RequestMethod.PUT, value = "/{id}", produces = "application/json")
 	@ResponseBody
-	public ResponseEntity <Contact> updateContact(@PathVariable String email, @RequestBody Contact contact){
-		return contactService.updateContact(email,contact);
+	public ResponseEntity <Contact> updateContact(@PathVariable long id, @RequestBody Contact contact){
+		return contactService.updateContact(id,contact);
 	}
 
-	@RequestMapping(method = RequestMethod.DELETE, value = "/{email}", produces = "application/json")
+	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}", produces = "application/json")
 	@ResponseBody
-	public ResponseEntity< Contact > deleteContact(@PathVariable String email){
-		return contactService.deleteContact(email);
+	public ResponseEntity< Contact > deleteContact(@PathVariable long id){
+		return contactService.deleteContact(id);
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/send-mail", produces = "application/json")

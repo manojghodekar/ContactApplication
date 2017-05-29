@@ -40,10 +40,10 @@ public class ContactServiceImpl implements ContactService{
 	}
 
 	@Override
-	public  ResponseEntity< Contact>   getContact(String email) {
+	public  ResponseEntity< Contact>   getContact(long id) {
 		Contact contact = new Contact();
 		try{
-			contact	= contactDao.getContact(email) ;
+			contact	= contactDao.getContact(id) ;
 			if (contact == null) {
 				throw new ContactException ("Contact with given email id Does not exist");
 			}
@@ -57,6 +57,10 @@ public class ContactServiceImpl implements ContactService{
 	@Override
 	public ResponseEntity<Contact> createContact(Contact contact) {
 		try{
+			Contact oldContact = contactDao.getContactByEmail(contact.getEmailId());
+			if(oldContact != null){
+				throw new ContactException ("Contact with given email id already exist");
+			}
 			Contact	newContact=contactDao.createContact(contact);
 			return new ResponseEntity<Contact>(	newContact,HttpStatus.OK);
 		} catch(Exception e){
@@ -66,12 +70,13 @@ public class ContactServiceImpl implements ContactService{
 	}
 
 	@Override
-	public ResponseEntity<Contact> updateContact(String email,Contact contact) {
+	public ResponseEntity<Contact> updateContact(long id,Contact contact) {
 		try{
-			Contact newContact=contactDao.getContact(email);
-			if(newContact.getEmailId().equals(contact.getEmailId())){
+			Contact newContact=contactDao.getContact(id);
+			if(newContact != null){
 				newContact.setFirstName(contact.getFirstName());
 				newContact.setLastName(contact.getLastName());
+				newContact.setEmailId(contact.getEmailId());
 				newContact.setInstituteName(contact.getInstituteName());
 				newContact.setAddress(contact.getAddress());
 				newContact.setCountry(contact.getCountry());
@@ -80,7 +85,7 @@ public class ContactServiceImpl implements ContactService{
 				contactDao.createContact(newContact);
 				return new ResponseEntity<Contact>(	newContact,HttpStatus.OK);
 			} else {
-				throw new ContactException ("Given Contact can not be update due to different email id");
+			  throw new ContactException ("Contact with given id does not exist");
 			}
 		} catch(Exception e){
 			logger.error("Error in updateContact :" +e) ;
@@ -89,14 +94,14 @@ public class ContactServiceImpl implements ContactService{
 	}
 
 	@Override
-	public ResponseEntity<Contact> deleteContact(String email) {
+	public ResponseEntity<Contact> deleteContact(long id) {
 		try{
-			Contact contact = contactDao.getContact(email);
+			Contact contact = contactDao.getContact(id);
 			if(contact!=null){
 				contactDao.deleteContact(contact);
 				return new ResponseEntity<Contact>(	contact,HttpStatus.OK);
 			}else {
-				throw new ContactException ("Contact with given email id does not exist");
+				throw new ContactException ("Contact with given id does not exist");
 			}
 		} catch( Exception e){
 			logger.error("Error in Delete Contact :" + e);

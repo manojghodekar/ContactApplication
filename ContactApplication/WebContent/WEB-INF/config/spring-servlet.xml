@@ -20,7 +20,6 @@
 			<value>
 				json=application/json
 				xml=application/xml
-				html=text/html
 			</value>
 		</property>
 	</bean>

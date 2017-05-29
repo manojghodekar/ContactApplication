@@ -1,15 +1,44 @@
-.body {
-    background-color: lightblue;
+.body1 {
+     background:  lightgreen;
      border-collapse: collapse;
     
+}
+
+.button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    border: none;
+    cursor: pointer;
+}
+
+.field-wrap {
+  position:relative;
+  margin-bottom:40px;
+}
+
+.body {
+  background:#F3FAB6;
+  font-family: 'Titillium Web', sans-serif;
 }
 .tablecontainer{
 	padding-left: 20px;
 }
+
+.cancelbtn {
+    padding: 14px 20px;
+    background-color: #f44336;
+}
+ .noborder
+      {
+        border:0;
+        cellpadding:0;
+      }
+
 .form {
   background:rgba($form-bg,.9);
   padding: 40px;
-  max-width:600px;
+  max-width:400px;
   margin:40px auto;
   border-radius:$br;
   box-shadow:0 4px 10px 4px rgba($form-bg,.3);
@@ -17,4 +46,37 @@
 .formcontainer{
 	background-color: #DAE8E8;
 	padding: 20px;
+	margin:40px auto;
+}
+.generic-container {
+  width:80%;
+  margin-left: 20px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  padding: 20px;
+  background-color: #EAE7E7;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 0 30px black;
+  align:"center";
+}
+
+table.tr.empty {
+  width: 350px;
+  border-collapse: collapse;
+  empty-cells: hide;
+}
+
+table.tr{
+	border :1px;
+	cellpadding : 5px;
+	
+}
+table thead th { border-bottom: 1px solid #000; }
+
+table { border-spacing: 5px; }
+
+th, td { padding: 7px;
+         align : center;
+ }
 }

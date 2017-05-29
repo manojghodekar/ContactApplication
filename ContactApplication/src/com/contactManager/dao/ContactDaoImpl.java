@@ -2,7 +2,10 @@ package com.contactManager.dao;
 
 import java.util.List;
 
+
+
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,8 +42,8 @@ public class ContactDaoImpl implements ContactDao {
 	}
 
 	@Override
-	public Contact getContact(String email) {
-		return  (Contact) sessionFactory.getCurrentSession().get(Contact.class,email);
+	public Contact getContact(long id) {
+		return  (Contact) sessionFactory.getCurrentSession().get(Contact.class,id);
 	}
 
 	@Override
@@ -52,5 +55,11 @@ public class ContactDaoImpl implements ContactDao {
 	@Override
 	public void deleteContact(Contact contact) {
 		sessionFactory.getCurrentSession().delete(contact);
+	}
+	
+	@Override
+	public Contact getContactByEmail(String email) {
+		Query query= sessionFactory.getCurrentSession().createQuery("from Contact where emailId=:email").setParameter("email", email);
+		return (Contact) query.uniqueResult();
 	}
 }
